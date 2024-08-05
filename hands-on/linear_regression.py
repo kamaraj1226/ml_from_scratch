@@ -75,7 +75,7 @@ class LinearRegression(Plot):
 
         self._alpha = 0.0002  # learning rate
         # self.weights = [0] * (self.features.col)
-        self.weights = [0, 1, 1]
+        self.weights = [0] + [1] * (self.features.col - 1)
 
     def predict_y(self, feature):
         """
@@ -98,11 +98,18 @@ class LinearRegression(Plot):
         error /= 2 * self.features.row
         return error
 
+    def update_weights(self, new_weights):
+        """
+        Update weights
+        """
+        self.weights = new_weights
+
     def gradient_descent(self):
         """
         Tell me which direction i should move to find global minima
         """
         errors = []
+        new_weights = []
         for i, w in enumerate(self.weights):
             error = 0
             for feature, y in zip(self.features.features, self.y_values):
@@ -110,8 +117,11 @@ class LinearRegression(Plot):
                 error += (predicted_y - y) * feature[i]
             error /= self.features.row
             errors.append(error)
-            self.weights[i] = w - (self.alpha * error)
-        print("Costs:", errors)
+            new_weights.append(w - (self.alpha * error))
+
+        self.update_weights(new_weights)
+        # print("Costs:", errors)
+
         if self.plot:
             self.plot_2d(errors, self.weights)
 
@@ -120,9 +130,10 @@ class LinearRegression(Plot):
         Train model
         """
         print(f"Error before traning: {self.cost()}")
-        for i in range(epoch):
+        for _ in range(epoch):
             self.gradient_descent()
-            print(f"Training {i+1}: Error:{self.cost()} Weights:{self.weights}")
+            # print(f"Training {i+1}: Error:{self.cost()}")
+        print(f"After Training: {self.cost()}")
 
     @property
     def alpha(self):
@@ -157,7 +168,8 @@ def main():
     try:
         f = Feature(x1_values, x2_values)
         l = LinearRegression(f, y_values=y_values)
-        l.train(3)
+        l.train(700)
+        print(f"Weights: {l.weights}")
 
     except ValueError as err:
         print(err)
