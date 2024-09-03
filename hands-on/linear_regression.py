@@ -73,7 +73,7 @@ class LinearRegression(Plot):
         self.features: Feature = features
         self.y_values = y_values
 
-        self._alpha = 0.0002  # learning rate
+        self.__alpha = 0.0002  # learning rate
         # self.weights = [0] * (self.features.col)
         self.weights = [0] + [1] * (self.features.col - 1)
 
@@ -140,7 +140,7 @@ class LinearRegression(Plot):
         """
         return learning rate
         """
-        return self._alpha
+        return self.__alpha
 
     @alpha.setter
     def alpha(self, new_alpha):
@@ -148,7 +148,7 @@ class LinearRegression(Plot):
             raise ValueError(
                 "Learning Rate value is not supported expected integer or float value."
             )
-        self._alpha = new_alpha
+        self.__alpha = new_alpha
 
     def __str__(self) -> str:
         return f"Learning Rate: {self.alpha}\
