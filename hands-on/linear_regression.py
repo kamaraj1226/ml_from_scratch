@@ -28,7 +28,7 @@ class Feature:
     def __str__(self) -> str:
         return f"{self.features}"
 
-    def get_row_and_col(self) -> Tuple[int, int]:
+    def get_row_and_col(self) -> Tuple[int, int, int]:
         """
         Print shape of the features
         """
